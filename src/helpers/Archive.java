@@ -1,26 +1,17 @@
 package helpers;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Archive {
     public String[] readFile(String path) throws IOException {
-        List<String> lines = new ArrayList<String>();
-        String line;
-
         InputStream flux = new FileInputStream(path);
         InputStreamReader lecture = new InputStreamReader(flux);
 
+        List<String> lines = new ArrayList<>();
         try (BufferedReader buff = new BufferedReader(lecture)) {
-            line = buff.readLine();
+            String line = buff.readLine();
 
             while (line != null && !line.isEmpty()) {
                 lines.add(line);
@@ -31,14 +22,15 @@ public class Archive {
         String[] data = lines.toArray(new String[]{});
 
         flux.close();
+
         return data;
     }
 
     public void writeFile(String path, String field) {
         try {
-            File fFile = null;
-            fFile = new File(path);
-            FileWriter fwFile = null;
+            FileWriter fwFile;
+
+            File fFile = new File(path);
 
             if (fFile.exists()) {
                 fwFile = new FileWriter(fFile, true);

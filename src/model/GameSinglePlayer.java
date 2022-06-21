@@ -1,39 +1,37 @@
 package model;
 
+/**
+ * Entidade que representa um jogo single player
+ */
 public class GameSinglePlayer implements Game {
-    String name;
-    Integer type;
-    Float price;
-    String releaseYear;
-    String genre;
+    private String name;
+    private Integer type;
+    private Float price;
+    private String releaseYear;
+    private String genre;
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.name;
     }
 
     @Override
     public Integer getType() {
-        // Sempre que um jogo for cadastrado como single player, o tipo será 1.
-        return 1;
+        return 1; // Sempre que um jogo for single player o tipo será 1.
     }
 
     @Override
     public Float getPrice() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.price;
     }
 
     @Override
     public String getReleaseYear() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.releaseYear;
     }
 
     @Override
     public String getGenre() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.genre;
     }
 }

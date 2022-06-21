@@ -1,35 +1,39 @@
 package model;
 
-public class GameMultiplayer implements Game{
+/**
+ * Entidade que representa um jogo multiplayer
+ */
+public class GameMultiplayer implements Game {
+
+    private String name;
+    private Integer type;
+    private Float price;
+    private String releaseYear;
+    private String genre;
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.name;
     }
 
     @Override
     public Integer getType() {
-        // TODO Auto-generated method stub
-        return null;
+        return 1; // Sempre que um jogo for multiplayer o tipo será 2. {???}
     }
 
     @Override
     public Float getPrice() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.price;
     }
 
     @Override
     public String getReleaseYear() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.releaseYear;
     }
 
     @Override
     public String getGenre() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.genre;
     }
-    
+
 }

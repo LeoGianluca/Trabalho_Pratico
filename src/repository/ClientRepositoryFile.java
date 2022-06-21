@@ -1,15 +1,15 @@
 package repository;
+
+import helpers.Archive;
+import model.Client;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Client;
-import helpers.Archive;
-
-import java.io.IOException;
-
 public class ClientRepositoryFile implements ClientRepository {
-    private static final String PATH = "clients.txt";
-    Archive archive = new Archive();
+    private static final String PATH = "db/clients.txt";
+    final Archive archive = new Archive();
 
     @Override
     public void create(Client client) {
@@ -23,13 +23,13 @@ public class ClientRepositoryFile implements ClientRepository {
     }
 
     @Override
-    public void delete(String uuid) {
+    public void delete() {
         throw new UnsupportedOperationException("[ERROR]: Não implementado para esta interface");
     }
 
     @Override
     public void readAll() {
-        List <Client> clients = new ArrayList<Client>();
+        List<Client> clients = new ArrayList<>();
 
         try {
             System.out.println("UUID \t\t\t\t     | Documento \t | Nome");
@@ -47,7 +47,6 @@ public class ClientRepositoryFile implements ClientRepository {
 
             System.out.print("-----------------------------------------------------------------------\n");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
