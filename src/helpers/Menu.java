@@ -12,7 +12,7 @@ public class Menu {
 
     public void printPeopleMenu() {
         System.out.println();
-        System.out.println("=== MENU DE CLIENTES === ");
+        System.out.println("### MENU DE CLIENTES ###");
         System.out.println("1 - Cadastrar cliente");
         System.out.println("2 - Listar clientes");
         System.out.println("3 - Relatório de consumo do cliente");
@@ -22,7 +22,7 @@ public class Menu {
 
     public void printStoreMenu() {
         System.out.println();
-        System.out.println("=== MENU DA LOJA ===");
+        System.out.println("### MENU DA LOJA ###");
         System.out.println("1 - Cadastrar jogo");
         System.out.println("2 - Listar jogos");
         System.out.println("3 - Listar jogos pelo genêro");

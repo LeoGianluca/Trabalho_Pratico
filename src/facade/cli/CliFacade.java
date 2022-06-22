@@ -8,114 +8,124 @@ import repository.GameSinglePlayerRepositoryFile;
 import java.util.Scanner;
 
 public class CliFacade {
-    Menu menu = new Menu();
+    private Menu menu = new Menu();
 
-    public static void peopleOptions() {
-        ClientRepositoryFile client = new ClientRepositoryFile();
+    static Scanner scanner = new Scanner(System.in);
 
-        Menu menu = new Menu();
+    public void peopleOptions() {
+        ClientRepositoryFile clientRepository = new ClientRepositoryFile();
 
-        try (Scanner readOperations = new Scanner(System.in)) {
-            menu.printPeopleMenu();
+        menu.printPeopleMenu();
 
-            int option = readOperations.nextInt();
+        int option = scanner.nextInt();
 
+        while (option != 0) {
             switch (option) {
                 case 1:
-                    System.out.println("\n\t CADASTRAR CLIENTE");
-                    formPeople();
+                    System.out.println();
+                    System.out.println(">>> CADASTRAR CLIENTE");
+                    formPeople(scanner);
                     break;
                 case 2:
-                    System.out.println("\n\t LISTA DE CLIENTES");
-                    client.readAll();
+                    System.out.println();
+                    System.out.println(">>> LISTA DE CLIENTES");
+                    clientRepository.readAll();
+                    break;
+                case 3:
+                    System.out.println();
+                    System.out.println(">>> RELATORIO DE CLIENTES");
+                    //clientRepository.readAll();
+                    break;
+                default:
+                    System.out.println();
+                    System.out.println("[ERROR]: Escolha uma opção válida do menu de opções");
+                    break;
+            }
+
+            menu.printPeopleMenu();
+
+            option = scanner.nextInt();
+        }
+
+        printMainMenu();
+    }
+
+    public void storeOptions() {
+        GameSinglePlayerRepositoryFile singlePlayer = new GameSinglePlayerRepositoryFile();
+
+        menu.printStoreMenu();
+
+        int option = scanner.nextInt();
+
+        while (option != 0) {
+            switch (option) {
+                case 1:
+                    System.out.println("\n\t CADASTRAR JOGO");
+                    formGame();
+                    break;
+                case 2:
+                    System.out.println("\t LISTA DE JOGOS");
+                    singlePlayer.readAll();
+                    break;
+                case 3:
+                    System.out.println("\t LISTA DE JOGOS POR GENÊRO");
+
+                    try (Scanner readFormStore = new Scanner(System.in)) {
+                        System.out.print("Genêro do jogo: ");
+                        String genre = readFormStore.nextLine();
+
+                        singlePlayer.filterGender(genre);
+                    } catch (Exception e) {
+                        System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
+                    }
+
+                    break;
+                case 4:
+                    System.out.println("\t LISTA DE JOGOS POR ANO");
+
+                    try (Scanner readFormStore = new Scanner(System.in)) {
+                        System.out.print("Ano do jogo: ");
+                        String releaseYear = readFormStore.nextLine();
+
+                        singlePlayer.filterRelease(releaseYear);
+                    } catch (Exception e) {
+                        System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
+                    }
+
+                    break;
+                case 5:
+                    System.out.println("\t LISTA DE JOGOS POR VALOR");
+
+                    try (Scanner readFormStore = new Scanner(System.in)) {
+                        System.out.print("Insira o valor máximo do jogo: ");
+                        float price = readFormStore.nextFloat();
+
+                        singlePlayer.filterPrice(price);
+                    } catch (Exception e) {
+                        System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
+                    }
+
                     break;
                 default:
                     System.out.println("\n\t Até mais!");
                     break;
             }
-        } catch (Exception e) {
-            System.out.println("[ERROR]: Escolha de opções " + e);
+
+            menu.printStoreMenu();
+
+            option = scanner.nextInt();
         }
 
+        printMainMenu();
     }
 
-    public static void storeOptions() {
-        GameSinglePlayerRepositoryFile singlePlayer = new GameSinglePlayerRepositoryFile();
-
-        Menu menu = new Menu();
-
-        while1:
-        while (true) {
-            try (Scanner readOperations = new Scanner(System.in)) {
-                int option;
-
-                menu.printStoreMenu();
-
-                option = readOperations.nextInt();
-
-                switch (option) {
-                    case 1:
-                        System.out.println("\n\t CADASTRAR JOGO");
-                        formGame();
-                        break;
-                    case 2:
-                        System.out.println("\t LISTA DE JOGOS");
-                        singlePlayer.readAll();
-                        break;
-                    case 3:
-                        System.out.println("\t LISTA DE JOGOS POR GENÊRO");
-
-                        try (Scanner readFormStore = new Scanner(System.in)) {
-                            System.out.print("Genêro do jogo: ");
-                            String genre = readFormStore.nextLine();
-
-                            singlePlayer.filterGender(genre);
-                        } catch (Exception e) {
-                            System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
-                        }
-                        break;
-                    case 4:
-                        System.out.println("\t LISTA DE JOGOS POR ANO");
-
-                        try (Scanner readFormStore = new Scanner(System.in)) {
-                            System.out.print("Ano do jogo: ");
-                            String releaseYear = readFormStore.nextLine();
-
-                            singlePlayer.filterRelease(releaseYear);
-                        } catch (Exception e) {
-                            System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
-                        }
-                        break;
-                    case 5:
-                        System.out.println("\t LISTA DE JOGOS POR VALOR");
-
-                        try (Scanner readFormStore = new Scanner(System.in)) {
-                            System.out.print("Insira o valor máximo do jogo: ");
-                            float price = readFormStore.nextFloat();
-
-                            singlePlayer.filterPrice(price);
-                        } catch (Exception e) {
-                            System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
-                        }
-                        break;
-                    default:
-                        System.out.println("\n\t Até mais!");
-                        break while1;
-                }
-
-            } catch (Exception e) {
-                System.out.println("[ERROR]: Escolha de opções " + e);
-            }
-        }
-    }
-
-    private static void formPeople() {
-        try (Scanner readFormPeople = new Scanner(System.in)) {
+    private void formPeople(Scanner scanner) {
+        try {
             System.out.print("Digite o nome do cliente: ");
-            String name = readFormPeople.nextLine();
+            String name = scanner.next();
 
             System.out.print("Digite o documento do cliente: ");
-            String document = readFormPeople.nextLine();
+            String document = scanner.next();
 
             ClientRepositoryFile clientRepository = new ClientRepositoryFile();
 
@@ -127,38 +137,31 @@ public class CliFacade {
         }
     }
 
-    private static void formGame() {
-        try (Scanner readFormStore = new Scanner(System.in)) {
+    private void formGame() {
+        try (Scanner scanner = new Scanner(System.in)) {
             System.out.print("Digite o nome do jogo: ");
-            String name = readFormStore.nextLine();
+            String name = scanner.nextLine();
 
             System.out.print("Digite o ano do jogo: ");
-            String releaseYear = readFormStore.nextLine();
+            String releaseYear = scanner.nextLine();
 
             System.out.print("Digite o genêro do jogo: ");
-            String genre = readFormStore.nextLine();
+            String genre = scanner.nextLine();
 
             System.out.print("Tipo do jogo, digite (1) para SinglePlayer e (2) para MultiPlayer: ");
-            String type = readFormStore.nextLine();
-
-
+            String type = scanner.nextLine();
         } catch (Exception e) {
             System.out.println("[ERROR]: Ao inserir valores " + e.getMessage());
         }
     }
 
-    public void run() {
-        int option;
+    public void printMainMenu() {
+        menu.printStartMenu();
 
-        try (Scanner readStart = new Scanner(System.in)) {
-            menu.printStartMenu();
+        int option = scanner.nextInt();
 
-            option = readStart.nextInt();
-
+        while (option != 0) {
             switch (option) {
-                case 0:
-                    System.out.println("\nPrograma finalizado, até mais!");
-                    break;
                 case 1:
                     peopleOptions();
                     break;
@@ -168,8 +171,10 @@ public class CliFacade {
                 default:
                     System.out.println("Opção inválida.");
             }
-        } catch (Exception e) {
-            System.out.println("[ERROR]: Menu inicial " + e.getMessage());
+
+//              menu.printStartMenu();
+//              option = scanner.nextInt();
         }
     }
+
 }

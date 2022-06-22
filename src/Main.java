@@ -4,6 +4,6 @@ public class Main {
     public static void main(String[] args) {
         CliFacade cli = new CliFacade();
 
-        cli.run();
+        cli.printMainMenu();
     }
 }
