@@ -16,7 +16,7 @@ public class ClientRepositoryFile implements ClientRepository {
         System.out.println("[INFO]: Registrando pessoa...");
 
         try {
-            archive.writeFile(PATH, client.getUuid() + ";" + client.getDocument() + ";" + client.getName() + "\n");
+            archive.writeFile(PATH, client.getUuid() + ";" + client.getDocument() + ";" + client.getName() + "; \n");
         } catch (Exception e) {
             System.out.println("[ERROR]:  Ao cadastrar cliente" + e.getMessage());
         }

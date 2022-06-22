@@ -25,6 +25,9 @@ public class Menu {
         System.out.println("=== MENU DA LOJA ===");
         System.out.println("1 - Cadastrar jogo");
         System.out.println("2 - Listar jogos");
+        System.out.println("3 - Listar jogos pelo genêro");
+        System.out.println("4 - Listar jogos pelo ano");
+        System.out.println("5 - Listar jogos pelo valor");
         System.out.println("0 - Voltar ao menu anterior");
         System.out.print("Escolha: ");
     }

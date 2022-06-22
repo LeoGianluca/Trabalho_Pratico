@@ -40,7 +40,7 @@ public class Archive {
 
             BufferedWriter bw = new BufferedWriter(fwFile);
 
-            bw.write(field + " \n");
+            bw.write(field);
 
             bw.close();
             fwFile.close();
