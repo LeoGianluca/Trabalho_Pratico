@@ -4,19 +4,28 @@ import helpers.Menu;
 import model.Client;
 import model.GameMultiplayer;
 import model.GameSinglePlayer;
+import model.Sale;
 import repository.ClientRepositoryFile;
 import repository.GameMultiPlayerRepositoryFile;
 import repository.GameSinglePlayerRepositoryFile;
+import repository.SaleRepositoryFile;
 
 import java.util.Scanner;
 
 public class CliFacade {
-	private Menu menu = new Menu();
+	private final Menu menu = new Menu();
 
 	static Scanner scanner = new Scanner(System.in);
 
+	ClientRepositoryFile clientRepository = new ClientRepositoryFile();
+
+	GameSinglePlayerRepositoryFile gameSinglePlayerFile = new GameSinglePlayerRepositoryFile();
+
+	GameMultiPlayerRepositoryFile gameMultiPlayerFile = new GameMultiPlayerRepositoryFile();
+
+	SaleRepositoryFile saleRepositoryFile = new SaleRepositoryFile();
+
 	public void peopleOptions() {
-		ClientRepositoryFile clientRepository = new ClientRepositoryFile();
 
 		menu.printPeopleMenu();
 
@@ -34,11 +43,6 @@ public class CliFacade {
 					System.out.println(">>> LISTA DE CLIENTES");
 					clientRepository.readAll();
 					break;
-				case 3:
-					System.out.println();
-					System.out.println(">>> RELATORIO DE CLIENTES");
-					//clientRepository.readAll();
-					break;
 				default:
 					System.out.println();
 					System.out.println("[ERROR]: Escolha uma opção válida do menu de opções");
@@ -52,9 +56,6 @@ public class CliFacade {
 	}
 
 	public void storeOptions() {
-		GameSinglePlayerRepositoryFile singlePlayer = new GameSinglePlayerRepositoryFile();
-		GameMultiPlayerRepositoryFile multiPlayer = new GameMultiPlayerRepositoryFile();
-
 		menu.printStoreMenu();
 
 		int option = scanner.nextInt();
@@ -63,12 +64,12 @@ public class CliFacade {
 			switch (option) {
 				case 1:
 					System.out.println("\n\t CADASTRAR JOGO");
-					formGame();
+					formGame(scanner);
 					break;
 				case 2:
 					System.out.println("\t LISTA DE JOGOS");
-					singlePlayer.readAll();
-					multiPlayer.readAll();
+					gameSinglePlayerFile.readAll();
+					gameMultiPlayerFile.readAll();
 					break;
 				case 3:
 					System.out.println("\t LISTA DE JOGOS POR GENÊRO");
@@ -76,8 +77,8 @@ public class CliFacade {
 					System.out.print("Genêro do jogo: ");
 					String genre = scanner.next();
 
-					singlePlayer.filterGender(genre);
-					multiPlayer.filterGender(genre);
+					gameSinglePlayerFile.filterGender(genre);
+					gameMultiPlayerFile.filterGender(genre);
 					break;
 				case 4:
 					System.out.println("\t LISTA DE JOGOS POR ANO");
@@ -85,8 +86,8 @@ public class CliFacade {
 					System.out.print("Ano do jogo: ");
 					String releaseYear = scanner.next();
 
-					singlePlayer.filterRelease(releaseYear);
-					multiPlayer.filterRelease(releaseYear);
+					gameSinglePlayerFile.filterRelease(releaseYear);
+					gameMultiPlayerFile.filterRelease(releaseYear);
 					break;
 				case 5:
 					System.out.println("\t LISTA DE JOGOS POR VALOR");
@@ -94,8 +95,31 @@ public class CliFacade {
 					System.out.print("Insira o valor máximo do jogo: ");
 					float price = scanner.nextFloat();
 
-					singlePlayer.filterPrice(price);
-					multiPlayer.filterPrice(price);
+					gameSinglePlayerFile.filterPrice(price);
+					gameMultiPlayerFile.filterPrice(price);
+					break;
+				case 6:
+					System.out.println("\t REALIZAR COMPRA DE JOGOS");
+					System.out.println("\t OBS: Para comprar copie e cole o UUID do cliente e o UUID do jogo");
+
+					clientRepository.readAll();
+
+					gameSinglePlayerFile.readAll();
+					gameMultiPlayerFile.readAll();
+
+					formSale(scanner);
+
+					break;
+				case 7:
+					System.out.println("\t BUSCAR JOGOS DE UM CLIENTE");
+					System.out.println("\t OBS: Para buscar copie e cole o UUID do cliente");
+
+					clientRepository.readAll();
+
+					System.out.print("UUID do cliente: ");
+					String uuidClient = scanner.next();
+
+					saleRepositoryFile.salesForClient(uuidClient);
 					break;
 				default:
 					System.out.println("\n\t Até mais!");
@@ -108,6 +132,22 @@ public class CliFacade {
 		}
 	}
 
+	private void formSale(Scanner scanner) {
+		try {
+			System.out.print("UUID do cliente: ");
+			String uuidClient = scanner.next();
+
+			System.out.print("UUID do cliente: ");
+			String uuidGame = scanner.next();
+
+			Sale sale = new Sale(uuidClient, uuidGame);
+			saleRepositoryFile.create(sale);
+
+		} catch (Exception e) {
+			System.out.println("[ERROR]: Ao inserir valores " + e.getMessage());
+		}
+	}
+
 	private void formPeople(Scanner scanner) {
 		try {
 			System.out.print("Digite o nome do cliente: ");
@@ -115,8 +155,6 @@ public class CliFacade {
 
 			System.out.print("Digite o documento do cliente: ");
 			String document = scanner.next();
-
-			ClientRepositoryFile clientRepository = new ClientRepositoryFile();
 
 			Client client = new Client(name, document);
 
@@ -126,8 +164,9 @@ public class CliFacade {
 		}
 	}
 
-	private void formGame() {
-		try (Scanner scanner = new Scanner(System.in)) {
+	private void formGame(Scanner scanner) {
+		try {
+
 			System.out.print("Digite o nome do jogo: ");
 			String name = scanner.next();
 
@@ -147,20 +186,18 @@ public class CliFacade {
 				System.out.print("Máximo de jogadores: ");
 				int maxPlayers = scanner.nextInt();
 
-				GameMultiPlayerRepositoryFile multiPlayerRepository = new GameMultiPlayerRepositoryFile();
 				GameMultiplayer gameMultiPlayer = new GameMultiplayer(name, price, releaseYear, genre, maxPlayers);
 
-				multiPlayerRepository.create(gameMultiPlayer);
+				gameMultiPlayerFile.create(gameMultiPlayer);
 			} else {
-				GameSinglePlayerRepositoryFile singlePlayerRepository = new GameSinglePlayerRepositoryFile();
 				GameSinglePlayer singlePlayer = new GameSinglePlayer(name, price, releaseYear, genre);
 
-				singlePlayerRepository.create(singlePlayer);
+				gameSinglePlayerFile.create(singlePlayer);
 			}
-
 		} catch (Exception e) {
 			System.out.println("[ERROR]: Ao inserir valores " + e.getMessage());
 		}
+
 	}
 
 	public void printMainMenu() {

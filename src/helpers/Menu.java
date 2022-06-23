@@ -15,7 +15,6 @@ public class Menu {
         System.out.println("### MENU DE CLIENTES ###");
         System.out.println("1 - Cadastrar cliente");
         System.out.println("2 - Listar clientes");
-        System.out.println("3 - Relatório de consumo do cliente");
         System.out.println("0 - Voltar ao menu anterior");
         System.out.print("Escolha: ");
     }
@@ -28,6 +27,8 @@ public class Menu {
         System.out.println("3 - Listar jogos pelo genêro");
         System.out.println("4 - Listar jogos pelo ano");
         System.out.println("5 - Listar jogos pelo valor");
+        System.out.println("6 - Realizar compra");
+        System.out.println("7 - Compras de um cliente");
         System.out.println("0 - Voltar ao menu anterior");
         System.out.print("Escolha: ");
     }
