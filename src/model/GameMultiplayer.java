@@ -1,5 +1,7 @@
 package model;
 
+import java.util.UUID;
+
 /**
  * Entidade que representa um jogo multiplayer
  */
@@ -10,20 +12,32 @@ public class GameMultiplayer implements Game {
     private Float price;
     private String releaseYear;
     private String genre;
+    private Integer maxPlayers;
 
-    public GameMultiplayer(String _name, float _price, String _releaseYear, String _genre){
+    public Integer getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(Integer maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
+    public GameMultiplayer(String _name, float _price, String _releaseYear, String _genre, Integer _maxPlayers) {
+        this.uuid = UUID.randomUUID().toString();
         this.name = _name;
         this.price = _price;
         this.releaseYear = _releaseYear;
         this.genre = _genre;
+        this.maxPlayers = _maxPlayers;
     }
 
-    public GameMultiplayer(String _uuid, String _name, float _price, String _releaseYear, String _genre){
+    public GameMultiplayer(String _uuid, String _name, float _price, String _releaseYear, String _genre, Integer _maxPlayers) {
         this.uuid = _uuid;
         this.name = _name;
         this.price = _price;
         this.releaseYear = _releaseYear;
         this.genre = _genre;
+        this.maxPlayers = _maxPlayers;
     }
 
     @Override
@@ -33,7 +47,7 @@ public class GameMultiplayer implements Game {
 
     @Override
     public Integer getType() {
-        return 1; // Sempre que um jogo for multiplayer o tipo será 2
+        return 2; // Sempre que um jogo for multiplayer o tipo será 2
     }
 
     @Override
@@ -99,6 +113,10 @@ public class GameMultiplayer implements Game {
      */
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String toString() {
+        return this.uuid + "\t" + this.name + "\t" + this.price + "\t" + this.releaseYear + "\t" + this.genre + "\t" + this.maxPlayers;
     }
 
 }

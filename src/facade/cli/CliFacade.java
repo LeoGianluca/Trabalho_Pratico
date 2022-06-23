@@ -2,179 +2,186 @@ package facade.cli;
 
 import helpers.Menu;
 import model.Client;
+import model.GameMultiplayer;
+import model.GameSinglePlayer;
 import repository.ClientRepositoryFile;
+import repository.GameMultiPlayerRepositoryFile;
 import repository.GameSinglePlayerRepositoryFile;
 
 import java.util.Scanner;
 
 public class CliFacade {
-    private Menu menu = new Menu();
+	private Menu menu = new Menu();
 
-    static Scanner scanner = new Scanner(System.in);
+	static Scanner scanner = new Scanner(System.in);
 
-    public void peopleOptions() {
-        ClientRepositoryFile clientRepository = new ClientRepositoryFile();
+	public void peopleOptions() {
+		ClientRepositoryFile clientRepository = new ClientRepositoryFile();
 
-        menu.printPeopleMenu();
+		menu.printPeopleMenu();
 
-        int option = scanner.nextInt();
+		int option = scanner.nextInt();
 
-        while (option != 0) {
-            switch (option) {
-                case 1:
-                    System.out.println();
-                    System.out.println(">>> CADASTRAR CLIENTE");
-                    formPeople(scanner);
-                    break;
-                case 2:
-                    System.out.println();
-                    System.out.println(">>> LISTA DE CLIENTES");
-                    clientRepository.readAll();
-                    break;
-                case 3:
-                    System.out.println();
-                    System.out.println(">>> RELATORIO DE CLIENTES");
-                    //clientRepository.readAll();
-                    break;
-                default:
-                    System.out.println();
-                    System.out.println("[ERROR]: Escolha uma opção válida do menu de opções");
-                    break;
-            }
+		while (option != 0) {
+			switch (option) {
+				case 1:
+					System.out.println();
+					System.out.println(">>> CADASTRAR CLIENTE");
+					formPeople(scanner);
+					break;
+				case 2:
+					System.out.println();
+					System.out.println(">>> LISTA DE CLIENTES");
+					clientRepository.readAll();
+					break;
+				case 3:
+					System.out.println();
+					System.out.println(">>> RELATORIO DE CLIENTES");
+					//clientRepository.readAll();
+					break;
+				default:
+					System.out.println();
+					System.out.println("[ERROR]: Escolha uma opção válida do menu de opções");
+					break;
+			}
 
-            menu.printPeopleMenu();
+			menu.printPeopleMenu();
 
-            option = scanner.nextInt();
-        }
+			option = scanner.nextInt();
+		}
+	}
 
-        printMainMenu();
-    }
+	public void storeOptions() {
+		GameSinglePlayerRepositoryFile singlePlayer = new GameSinglePlayerRepositoryFile();
+		GameMultiPlayerRepositoryFile multiPlayer = new GameMultiPlayerRepositoryFile();
 
-    public void storeOptions() {
-        GameSinglePlayerRepositoryFile singlePlayer = new GameSinglePlayerRepositoryFile();
+		menu.printStoreMenu();
 
-        menu.printStoreMenu();
+		int option = scanner.nextInt();
 
-        int option = scanner.nextInt();
+		while (option != 0) {
+			switch (option) {
+				case 1:
+					System.out.println("\n\t CADASTRAR JOGO");
+					formGame();
+					break;
+				case 2:
+					System.out.println("\t LISTA DE JOGOS");
+					singlePlayer.readAll();
+					multiPlayer.readAll();
+					break;
+				case 3:
+					System.out.println("\t LISTA DE JOGOS POR GENÊRO");
 
-        while (option != 0) {
-            switch (option) {
-                case 1:
-                    System.out.println("\n\t CADASTRAR JOGO");
-                    formGame();
-                    break;
-                case 2:
-                    System.out.println("\t LISTA DE JOGOS");
-                    singlePlayer.readAll();
-                    break;
-                case 3:
-                    System.out.println("\t LISTA DE JOGOS POR GENÊRO");
+					System.out.print("Genêro do jogo: ");
+					String genre = scanner.next();
 
-                    try (Scanner readFormStore = new Scanner(System.in)) {
-                        System.out.print("Genêro do jogo: ");
-                        String genre = readFormStore.nextLine();
+					singlePlayer.filterGender(genre);
+					multiPlayer.filterGender(genre);
+					break;
+				case 4:
+					System.out.println("\t LISTA DE JOGOS POR ANO");
 
-                        singlePlayer.filterGender(genre);
-                    } catch (Exception e) {
-                        System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
-                    }
+					System.out.print("Ano do jogo: ");
+					String releaseYear = scanner.next();
 
-                    break;
-                case 4:
-                    System.out.println("\t LISTA DE JOGOS POR ANO");
+					singlePlayer.filterRelease(releaseYear);
+					multiPlayer.filterRelease(releaseYear);
+					break;
+				case 5:
+					System.out.println("\t LISTA DE JOGOS POR VALOR");
 
-                    try (Scanner readFormStore = new Scanner(System.in)) {
-                        System.out.print("Ano do jogo: ");
-                        String releaseYear = readFormStore.nextLine();
+					System.out.print("Insira o valor máximo do jogo: ");
+					float price = scanner.nextFloat();
 
-                        singlePlayer.filterRelease(releaseYear);
-                    } catch (Exception e) {
-                        System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
-                    }
+					singlePlayer.filterPrice(price);
+					multiPlayer.filterPrice(price);
+					break;
+				default:
+					System.out.println("\n\t Até mais!");
+					break;
+			}
 
-                    break;
-                case 5:
-                    System.out.println("\t LISTA DE JOGOS POR VALOR");
+			menu.printStoreMenu();
 
-                    try (Scanner readFormStore = new Scanner(System.in)) {
-                        System.out.print("Insira o valor máximo do jogo: ");
-                        float price = readFormStore.nextFloat();
+			option = scanner.nextInt();
+		}
+	}
 
-                        singlePlayer.filterPrice(price);
-                    } catch (Exception e) {
-                        System.out.println("[ERROR]: Filtrar valores " + e.getMessage());
-                    }
+	private void formPeople(Scanner scanner) {
+		try {
+			System.out.print("Digite o nome do cliente: ");
+			String name = scanner.next();
 
-                    break;
-                default:
-                    System.out.println("\n\t Até mais!");
-                    break;
-            }
+			System.out.print("Digite o documento do cliente: ");
+			String document = scanner.next();
 
-            menu.printStoreMenu();
+			ClientRepositoryFile clientRepository = new ClientRepositoryFile();
 
-            option = scanner.nextInt();
-        }
+			Client client = new Client(name, document);
 
-        printMainMenu();
-    }
+			clientRepository.create(client);
+		} catch (Exception e) {
+			System.out.println("[ERROR]: Ao inserir valores " + e.getMessage());
+		}
+	}
 
-    private void formPeople(Scanner scanner) {
-        try {
-            System.out.print("Digite o nome do cliente: ");
-            String name = scanner.next();
+	private void formGame() {
+		try (Scanner scanner = new Scanner(System.in)) {
+			System.out.print("Digite o nome do jogo: ");
+			String name = scanner.next();
 
-            System.out.print("Digite o documento do cliente: ");
-            String document = scanner.next();
+			System.out.print("Digite o ano do jogo: ");
+			String releaseYear = scanner.next();
 
-            ClientRepositoryFile clientRepository = new ClientRepositoryFile();
+			System.out.print("Digite o genêro do jogo: ");
+			String genre = scanner.next();
 
-            Client client = new Client(name, document);
+			System.out.print("Tipo do jogo, digite (1) para SinglePlayer e (2) para MultiPlayer: ");
+			int type = scanner.nextInt();
 
-            clientRepository.create(client);
-        } catch (Exception e) {
-            System.out.println("[ERROR]: Ao inserir valores " + e.getMessage());
-        }
-    }
+			System.out.print("Digite o preço do jogo: ");
+			float price = scanner.nextFloat();
 
-    private void formGame() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Digite o nome do jogo: ");
-            String name = scanner.nextLine();
+			if (type == 2) {
+				System.out.print("Máximo de jogadores: ");
+				int maxPlayers = scanner.nextInt();
 
-            System.out.print("Digite o ano do jogo: ");
-            String releaseYear = scanner.nextLine();
+				GameMultiPlayerRepositoryFile multiPlayerRepository = new GameMultiPlayerRepositoryFile();
+				GameMultiplayer gameMultiPlayer = new GameMultiplayer(name, price, releaseYear, genre, maxPlayers);
 
-            System.out.print("Digite o genêro do jogo: ");
-            String genre = scanner.nextLine();
+				multiPlayerRepository.create(gameMultiPlayer);
+			} else {
+				GameSinglePlayerRepositoryFile singlePlayerRepository = new GameSinglePlayerRepositoryFile();
+				GameSinglePlayer singlePlayer = new GameSinglePlayer(name, price, releaseYear, genre);
 
-            System.out.print("Tipo do jogo, digite (1) para SinglePlayer e (2) para MultiPlayer: ");
-            String type = scanner.nextLine();
-        } catch (Exception e) {
-            System.out.println("[ERROR]: Ao inserir valores " + e.getMessage());
-        }
-    }
+				singlePlayerRepository.create(singlePlayer);
+			}
 
-    public void printMainMenu() {
-        menu.printStartMenu();
+		} catch (Exception e) {
+			System.out.println("[ERROR]: Ao inserir valores " + e.getMessage());
+		}
+	}
 
-        int option = scanner.nextInt();
+	public void printMainMenu() {
+		menu.printStartMenu();
 
-        while (option != 0) {
-            switch (option) {
-                case 1:
-                    peopleOptions();
-                    break;
-                case 2:
-                    storeOptions();
-                    break;
-                default:
-                    System.out.println("Opção inválida.");
-            }
+		int option = scanner.nextInt();
 
-//              menu.printStartMenu();
-//              option = scanner.nextInt();
-        }
-    }
+		while (option != 0) {
+			switch (option) {
+				case 1:
+					peopleOptions();
+					break;
+				case 2:
+					storeOptions();
+					break;
+				default:
+					System.out.println("Opção inválida.");
+			}
 
+			menu.printStartMenu();
+			option = scanner.nextInt();
+		}
+	}
 }

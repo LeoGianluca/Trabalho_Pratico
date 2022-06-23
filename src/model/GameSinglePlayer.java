@@ -1,5 +1,7 @@
 package model;
 
+import java.util.UUID;
+
 /**
  * Entidade que representa um jogo single player
  */
@@ -12,6 +14,7 @@ public class GameSinglePlayer implements Game {
     private String genre;
 
     public GameSinglePlayer(String _name, float _price, String _releaseYear, String _genre){
+        this.uuid = UUID.randomUUID().toString();
         this.name = _name;
         this.price = _price;
         this.releaseYear = _releaseYear;
@@ -98,5 +101,9 @@ public class GameSinglePlayer implements Game {
      */
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String toString() {
+        return this.uuid + "\t" + this.name + "\t" + this.price + "\t" + this.releaseYear + "\t" + this.genre;
     }
 }
